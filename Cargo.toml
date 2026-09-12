@@ -1,5 +1,5 @@
 [package]
-name = "hydragum"
+name = "hydrargyum"
 version = "0.1.0"
 edition = "2024"
 
@@ -7,3 +7,4 @@ edition = "2024"
 anyhow = "1.0.104"
 cpal = "0.18.2"
 ringbuf = "0.5.1"
+thiserror = "2.0.20"
