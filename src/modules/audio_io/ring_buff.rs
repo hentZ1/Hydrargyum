@@ -1,3 +1,9 @@
+// o ring_buffer serve para manter o ciclo de audio estavel, o arquivo cria o ring_buffer que o
+// tamanho deve ser de acordo com um buffer NAO MUTAVEL, em outras palavras não pode ser re-alocado
+// novamente a seguir no codigo se não a banda de pacotes de audio desincroniza e tudo explode
+//
+// aqui tambem fica as funções de gravação e leitura dos pacotes de audio
+
 use ringbuf::{HeapRb, SharedRb, storage::Heap, traits::*, wrap::caching::Caching};
 use std::sync::Arc;
 

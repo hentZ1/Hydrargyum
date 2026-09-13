@@ -1,9 +1,8 @@
+use crate::modules::audio_io::{devices::*, error::AudioError, ring_buff::*};
 use cpal::{
     InputCallbackInfo, OutputCallbackInfo, Stream,
     traits::{DeviceTrait, HostTrait},
 };
-
-use crate::modules::audio_io::{devices::*, error::AudioError, ring_buff::*};
 
 pub fn input_stream_builder(mut producer: AudioProducer) -> Result<Stream, AudioError> {
     let host = cpal::default_host();

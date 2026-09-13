@@ -1,3 +1,12 @@
+// o arquivo devices serve pra pegar os dispositivos disponiveis no sistema do usuario-
+// e já deixar pronto a configuração para o uso da criação das streams de audio
+
+// # OPCIONAL
+// let host = cpal::default_host(); a logica disso aqui é dup mais de uma vez atraves dos modulos de
+// audio se alguem quiser fazer uma função auxiliar para buildar o host é viavel, mas eu neste
+// momento não penso como isso poderia deixar a duplicação menor inves de deixar apenas mais bonito
+
+// o arquivo error só serve para criar erros personalizados para melhor tratamento de erro-
 use crate::modules::audio_io::error::AudioError;
 use cpal::traits::{DeviceTrait, HostTrait};
 
