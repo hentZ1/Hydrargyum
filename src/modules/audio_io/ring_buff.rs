@@ -6,7 +6,7 @@ pub struct AudioProducer {
 }
 
 impl AudioProducer {
-    fn write(&mut self, samples: &[f32]) -> usize {
+    pub fn write(&mut self, samples: &[f32]) -> usize {
         self.inner.push_slice(samples)
     }
 }
@@ -15,7 +15,7 @@ pub struct AudioConsumer {
 }
 
 impl AudioConsumer {
-    fn read(&mut self, destination: &mut [f32]) -> usize {
+    pub fn read(&mut self, destination: &mut [f32]) -> usize {
         self.inner.pop_slice(destination)
     }
 }
