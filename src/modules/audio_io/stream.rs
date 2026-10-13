@@ -28,7 +28,7 @@ pub fn input_stream_builder(mut producer: AudioProducer) -> Result<Stream, Audio
 pub fn output_stream_builder(mut consumer: AudioConsumer) -> Result<Stream, AudioError> {
     let host = cpal::default_host();
     let device = host
-        .default_input_device()
+        .default_output_device()
         .ok_or(AudioError::NoOutputDevice)?;
 
     let supported_output_config = output_config()?;
