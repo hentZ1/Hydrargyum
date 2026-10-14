@@ -1,4 +1,4 @@
-use crate::modules::audio_io::{devices::*, error::AudioError, ring_buff::*};
+use crate::modules::audio_io::{AUDIO_CONFIG, error::AudioError, ring_buff::*};
 use cpal::{
     InputCallbackInfo, OutputCallbackInfo, Stream,
     traits::{DeviceTrait, HostTrait},
@@ -10,11 +10,8 @@ pub fn input_stream_builder(mut producer: AudioProducer) -> Result<Stream, Audio
         .default_input_device()
         .ok_or(AudioError::NoInputDevice)?;
 
-    let supported_input_config = input_config()?;
-    let stream_input_config = supported_input_config.config();
-
     let input_stream = device.build_input_stream(
-        stream_input_config,
+        AUDIO_CONFIG,
         move |data: &[f32], _info: &InputCallbackInfo| {
             producer.write(data);
         },
@@ -31,11 +28,8 @@ pub fn output_stream_builder(mut consumer: AudioConsumer) -> Result<Stream, Audi
         .default_output_device()
         .ok_or(AudioError::NoOutputDevice)?;
 
-    let supported_output_config = output_config()?;
-    let stream_ouput_config = supported_output_config.config();
-
     let output_stream = device.build_output_stream(
-        stream_ouput_config,
+        AUDIO_CONFIG,
         move |data: &mut [f32], _info: &OutputCallbackInfo| {
             consumer.read(data);
         },

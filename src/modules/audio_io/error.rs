@@ -5,16 +5,12 @@ pub enum AudioError {
     #[error("no input device available")]
     NoInputDevice,
 
-    #[error("error while querying configs")]
-    SupportedStreamConfigsError(#[from] cpal::Error),
-
-    #[error("no supported config")]
-    NoSupportedInputConfig,
-
-    //output errors
     #[error("no output device available")]
     NoOutputDevice,
 
-    #[error("no supported output config")]
-    NoSupportedOutputConfig,
+    #[error("audio stream error")]
+    Stream(#[from] cpal::Error),
+
+    #[error("opus codec error")]
+    Opus(#[from] opus::Error),
 }
