@@ -1,12 +1,8 @@
-use opus::{Application, Channels, Decoder, Encoder};
+use opus::{Application, Channels, Encoder};
 
-use crate::modules::audio_io::{
-    error::AudioError,
-    ring_buff::{AudioConsumer, AudioProducer},
-};
+use crate::modules::audio_io::{error::AudioError, ring_buff::AudioConsumer};
+use crate::modules::audio_types::{FRAME_SIZE, SAMPLE_RATE};
 
-pub const SAMPLE_RATE: u32 = 48_000;
-pub const FRAME_SIZE: usize = (SAMPLE_RATE as usize * 20) / 1000;
 const MAX_PACKET: usize = 4000;
 const WARMUP_SAMPLES: usize = SAMPLE_RATE as usize;
 const READ_CHUNK: usize = 1024;
@@ -57,39 +53,5 @@ impl AudioEncoder {
         }
 
         Ok(packets)
-    }
-}
-
-pub struct AudioDecoder {
-    decoder: Decoder,
-    producer: AudioProducer,
-    pcm: Vec<f32>,
-    dropped: usize,
-}
-
-impl AudioDecoder {
-    pub fn new(producer: AudioProducer) -> Result<Self, AudioError> {
-        let decoder = Decoder::new(SAMPLE_RATE, Channels::Mono)?;
-
-        Ok(Self {
-            decoder,
-            producer,
-            pcm: vec![0.0; FRAME_SIZE],
-            dropped: 0,
-        })
-    }
-
-    pub fn decode(&mut self, packet: Option<&[u8]>) -> Result<(), AudioError> {
-        let input = packet.unwrap_or(&[]);
-        let n = self.decoder.decode_float(input, &mut self.pcm, false)?;
-
-        let written = self.producer.write(&self.pcm[..n]);
-        self.dropped += n - written;
-
-        Ok(())
-    }
-
-    pub fn dropped(&self) -> usize {
-        self.dropped
     }
 }

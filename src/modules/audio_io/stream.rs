@@ -22,6 +22,11 @@ pub fn input_stream_builder(mut producer: AudioProducer) -> Result<Stream, Audio
     Ok(input_stream)
 }
 
+pub fn fill_underrun(data: &mut [f32], filled: usize) {
+    let filled = filled.min(data.len());
+    data[filled..].fill(0.0);
+}
+
 pub fn output_stream_builder(mut consumer: AudioConsumer) -> Result<Stream, AudioError> {
     let host = cpal::default_host();
     let device = host
@@ -31,7 +36,8 @@ pub fn output_stream_builder(mut consumer: AudioConsumer) -> Result<Stream, Audi
     let output_stream = device.build_output_stream(
         AUDIO_CONFIG,
         move |data: &mut [f32], _info: &OutputCallbackInfo| {
-            consumer.read(data);
+            let filled = consumer.read(data);
+            fill_underrun(data, filled);
         },
         move |err: cpal::Error| eprintln!("error on the stream output {:?}", err),
         None,
